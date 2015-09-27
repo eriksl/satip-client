@@ -439,6 +439,9 @@ static void set_frontend(struct satip_vtuner* vt, struct vtuner_message* msg)
           Do not set modulation system (aka delivery system)!
           This is done using FE_SET_PROPERTY(DTV_DELIVERY_SYSTEM)!
         */
+		/*
+		 * Above may be required for non-VU+ receivers, though
+		 */
 #endif
 
         DEBUG(MSG_MAIN,"MSG_SET_FRONTEND freq: %d symrate: %d \n",
@@ -595,6 +598,7 @@ static void set_property(struct satip_vtuner* vt, struct vtuner_message* msg)
         satip_set_modsys(vt->satip_cfg, ms_map[prop->u.data]);
         break;
     case DTV_FREQUENCY:
+		satip_set_freq(vt->satip_cfg, prop->u.data);
         DEBUG(MSG_MAIN,"set_property: DTV_FREQUENCY: Ignoring.\n");
         break;
     case DTV_MODULATION:
@@ -602,6 +606,7 @@ static void set_property(struct satip_vtuner* vt, struct vtuner_message* msg)
         satip_set_modtype(vt->satip_cfg, mt_map[prop->u.data]);
         break;
     case DTV_SYMBOL_RATE:
+		satip_set_symbol_rate(vt->satip_cfg, prop->u.data / 1000);
         DEBUG(MSG_MAIN,"set_property: DTV_SYMBOL_RATE: Ignoring.\n");
         break;
     case DTV_INNER_FEC:
